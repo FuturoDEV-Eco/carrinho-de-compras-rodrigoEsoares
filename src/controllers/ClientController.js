@@ -1,12 +1,7 @@
-const {Pool} = require('pg')
 
-const conexao = new Pool({
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: '281823',
-    database: 'lab_commerce'
-})
+const connection = require('../database/connection')
+
+
 
 class ClientController{
 
@@ -20,7 +15,7 @@ class ClientController{
                 return response.status(404).json({message: "Nome, email, cpf e contato são dados obrigatórios!"})
             }
 
-            const db_clients = await conexao.query(`
+            const db_clients = await connection.query(`
                 SELECT * from clients where cpf = $1 or email = $2
                 `, [data.cpf, data.email])
 
@@ -28,7 +23,7 @@ class ClientController{
                     return response.status(404).json({message: "cpf ou email já cadastrados"})
                 }
 
-            const client  = await conexao.query(`
+            const client  = await connection.query(`
                 INSERT INTO clients (name, email, cpf, contact)
                 values($1, $2, $3, $4)
                 returning *
