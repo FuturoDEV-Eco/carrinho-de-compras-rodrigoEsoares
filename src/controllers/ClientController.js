@@ -12,7 +12,7 @@ class ClientController{
             const data = request.body
 
             if(!data.name || !data.email || !data.cpf || !data.contact){
-                return response.status(404).json({message: "Nome, email, cpf e contato são dados obrigatórios!"})
+                return response.status(400).json({message: "Nome, email, cpf e contato são dados obrigatórios!"})
             }
 
             const db_clients = await connection.query(`
@@ -20,7 +20,7 @@ class ClientController{
                 `, [data.cpf, data.email])
 
                 if(db_clients.rowCount !== 0){
-                    return response.status(404).json({message: "cpf ou email já cadastrados"})
+                    return response.status(400).json({message: "cpf ou email já cadastrados"})
                 }
 
             const client  = await connection.query(`
