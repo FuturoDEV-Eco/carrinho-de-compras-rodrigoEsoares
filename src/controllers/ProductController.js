@@ -63,17 +63,19 @@ class ProductController {
 
       const product = await connection.query(
         `     SELECT
-              categories.id as id_categoria,
-              categories.name as categoria,
-              products.name as nome_do_produto,
-              products.amount as estoque,
-              products.color as cor,
-              products.description as descrição
-              from
+              products.name AS nome_do_produto,
+              products.amount AS estoque,
+              products.color AS cor,
+              products.voltage AS voltagem,
+              products.description AS descrição,
+              categories.id AS id_categoria,
+              categories.name AS categoria,
+              products.price AS preço
+              FROM
               products
-              join
+              JOIN
               categories on products.category_id = categories.id 
-              and categories.id = $1      
+              WHERE products.id = $1     
       `,
         [data.id]
       );
