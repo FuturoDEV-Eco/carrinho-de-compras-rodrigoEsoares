@@ -56,6 +56,39 @@ class ProductController {
         .json({ message: "Não foi possível listar os produtos." });
     }
   }
+
+  async listProduct(request, response) {
+    try {
+      const data = request.params;
+
+      const product = await connection.query(
+        `     SELECT
+              categories.id as id_categoria,
+              categories.name as categoria,
+              products.name as nome_do_produto,
+              products.amount as estoque,
+              products.color as cor,
+              products.description as descrição
+              from
+              products
+              join
+              categories on products.category_id = categories.id 
+              and categories.id = $1      
+      `,
+        [data.id]
+      );
+      if (product.rowCount === 0) {
+        return response
+          .status(404)
+          .json({ mensagem: "Não foi encontrado produto com esse id" });
+      }
+      response.json(product.rows[0]);
+    } catch {
+      response
+        .status(500)
+        .json({ mensagem: "Não foi possível localizar o produto!" });
+    }
+  }
 }
 
 module.exports = new ProductController();
