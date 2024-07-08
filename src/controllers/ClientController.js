@@ -1,6 +1,4 @@
 
-const connection = require('../database/connection')
-
 
 
 class ClientController{
